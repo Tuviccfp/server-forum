@@ -1,27 +1,24 @@
-package com.platformtest.app.domain;
+package com.platformtest.app.dto;
 
 import java.util.Objects;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import com.platformtest.app.domain.User;
 
-@Document
-public class User {
+public class UserDTO {
 	
-	@Id
 	private String id;
 	private String username;
 	private String password;
 	
-	public User() {
+	public UserDTO() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public User(String id, String username, String password) {
+	public UserDTO(User obj) {
 		super();
-		this.id = id;
-		this.username = username;
-		this.password = password;
+		this.id = obj.getId();
+		this.username = obj.getUsername();
+		this.password = obj.getPassword();
 	}
 
 	public String getId() {
@@ -31,7 +28,7 @@ public class User {
 	public void setId(String id) {
 		this.id = id;
 	}
-
+	
 	public String getUsername() {
 		return username;
 	}
@@ -61,8 +58,7 @@ public class User {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		User other = (User) obj;
+		UserDTO other = (UserDTO) obj;
 		return Objects.equals(id, other.id);
 	}
-	
 }
