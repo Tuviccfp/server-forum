@@ -1,10 +1,13 @@
 package com.platformtest.app.dto;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import com.platformtest.app.domain.User;
 
-public class UserDTO {
+public class UserDTO implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
 	
 	private String id;
 	private String username;
