@@ -19,9 +19,9 @@ public class UserDTO implements Serializable {
 
 	public UserDTO(User obj) {
 		super();
-		this.id = obj.getId();
-		this.username = obj.getUsername();
-		this.password = obj.getPassword();
+		id = obj.getId();
+		username = obj.getUsername();
+		password = obj.getPassword();
 	}
 
 	public String getId() {
