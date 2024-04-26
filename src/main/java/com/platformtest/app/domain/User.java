@@ -1,6 +1,7 @@
 package com.platformtest.app.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -15,8 +16,10 @@ public class User implements Serializable {
 
 	@Id
 	private String id;
-	private String username;
+	private String email;
+	private String name;
 	private String password;
+	private String role = "USER";
 	
 	@DBRef
 	private List<Asks> asks;
@@ -25,11 +28,13 @@ public class User implements Serializable {
 		// TODO Auto-generated constructor stub
 	}
 
-	public User(String id, String username, String password) {
+	public User(String id, String email, String password, String name) {
 		super();
 		this.id = id;
-		this.username = username;
+		this.email = email;
 		this.password = password;
+		this.name = name;
+		this.asks = new ArrayList<Asks>();
 	}
 
 	public String getId() {
@@ -40,20 +45,40 @@ public class User implements Serializable {
 		this.id = id;
 	}
 
-	public String getUsername() {
-		return username;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getPassword() {
 		return password;
 	}
-
+	
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getRole() {
+		return role;
+	}
+	
+	public List<Asks> getAsks() {
+		return asks;
+	}
+
+	public void setAsks(List<Asks> asks) {
+		this.asks = asks;
+	}
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	@Override

@@ -21,6 +21,10 @@ public class UserServices {
 		return userRepo.insert(user);
 	}
 
+	public Optional<User> findByName(String email) {
+		return userRepo.findByEmail(email);
+	}
+	
 	public List<User> findAllUsers() {
 		List<User> getUser = userRepo.findAll();
 		return getUser;
