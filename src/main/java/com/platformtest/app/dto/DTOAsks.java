@@ -1,4 +1,6 @@
 package com.platformtest.app.dto;
 
-public record DTOAsks(String id, String userId, String title, String bodyAsk) {
+import com.platformtest.app.domain.User;
+
+public record DTOAsks(String id, String title, String bodyAsk, String name) {
 }

@@ -13,6 +13,6 @@ import com.platformtest.app.domain.Asks;
 
 public interface MethodsAsksController {
 	ResponseEntity<List<Asks>> findAll();
-//	ResponseEntity<AsksDTO> findById(@PathVariable String id);
+	ResponseEntity<DTOAsks> findById(@PathVariable String id);
 	ResponseEntity<String> insertNewAsks(@RequestBody DTOAsks asks, @AuthenticationPrincipal Jwt jwt);
 }

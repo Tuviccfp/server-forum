@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.platformtest.app.domain.User;
 import com.platformtest.app.dto.DTOAsks;
+import com.platformtest.app.exception.IdNotFound;
 import com.platformtest.app.repository.UserRepository;
 import com.platformtest.app.services.AsksService;
 import com.platformtest.app.services.UserServices;
@@ -13,14 +14,12 @@ import org.springframework.http.ResponseEntity;
 
 import com.platformtest.app.controller.interfaces.MethodsAsksController;
 import com.platformtest.app.domain.Asks;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/asks")
 public class AsksController implements MethodsAsksController {
-
 
 	private final UserServices userServices;
 	private final AsksService asksService;
@@ -32,24 +31,24 @@ public class AsksController implements MethodsAsksController {
 		this.userRepository = userRepository;
 	}
 
+	@GetMapping(value = "/search-all")
 	@Override
 	public ResponseEntity<List<Asks>> findAll() {
 		List<Asks> asks = asksService.findAll();
 		return ResponseEntity.status(HttpStatus.OK).body(asks);
 	}
 
-//	@Override
-//	public ResponseEntity<AsksDTO> findById(String id) {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-
-	@PostMapping(value = "/register-test")
-	public ResponseEntity<String> insertTest(@AuthenticationPrincipal Jwt jwt, @RequestBody Asks asks) {
-		String id = "";
-		Asks ask = new Asks(asks.getId(), id, asks.getTitle(), asks.getBodyAsk());
-		ask = asksService.insertNewAsk(ask);
-		return ResponseEntity.ok("Criado com sucesso");
+	@GetMapping(value = "/list-ask/{id}")
+	@Override
+	public ResponseEntity<DTOAsks> findById(String id) {
+		Optional<Asks> existIdAsk = asksService.findById(id);
+		if (existIdAsk.isEmpty()) {
+			throw  new IdNotFound("Não existe nada com esse id");
+		}
+		Asks ask = existIdAsk.get();
+		String name = ask.getUser().getName();
+		DTOAsks dtoAsks = new DTOAsks(ask.getId(), ask.getTitle(), ask.getBodyAsk(), name);
+		return ResponseEntity.status(HttpStatus.OK).body(dtoAsks);
 	}
 
 	@PostMapping("/new-asks")
@@ -59,7 +58,7 @@ public class AsksController implements MethodsAsksController {
 		Optional<User> user = userRepository.findById(userId);
 		if (user.isPresent()) {
 			User getUser = user.get();
-			Asks ask = new Asks(asks.id(), userId, asks.title(), asks.bodyAsk());
+			Asks ask = new Asks(asks.id(), userId, asks.title(), asks.bodyAsk(), getUser);
 			ask = asksService.insertNewAsk(ask);
 			getUser.getAsks().add(ask);
 			userRepository.save(getUser);
@@ -67,14 +66,4 @@ public class AsksController implements MethodsAsksController {
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não existe nenhum usuário vindo de headers com esse id.");
     }
-
-	@GetMapping(value = "/return-user-by-id")
-	public ResponseEntity<User> returnId(@AuthenticationPrincipal Jwt jwt) {
-		String id = jwt.getSubject();
-		Optional<User> user = userServices.findById(id);
-		return ResponseEntity.ok(user.get());
-	}
-
-
-
 }

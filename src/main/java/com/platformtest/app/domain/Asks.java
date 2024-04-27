@@ -1,11 +1,8 @@
 package com.platformtest.app.domain;
 
-import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -16,21 +13,22 @@ public class Asks implements Serializable{
 
 	@Id
 	private String id;
-    private String userId;
     private String title;
     private String bodyAsk;
+
+	@DBRef
+	private User user;
 
 	public Asks() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Asks(String id, String userId, String title, String bodyAsk) {
+	public Asks(String ided, String id, String title, String bodyAsk, User user) {
 		super();
 		this.id = id;
-		this.userId = userId;
 		this.title = title;
 		this.bodyAsk = bodyAsk;
-//		this.user = new User();
+		this.user = user;
 	}
 
 	public String getId() {
@@ -39,14 +37,6 @@ public class Asks implements Serializable{
 
 	public void setId(String id) {
 		this.id = id;
-	}
-
-	public String getUserId() {
-		return userId;
-	}
-
-	public void setUserId(String userId) {
-		this.userId = userId;
 	}
 
 	public String getTitle() {
@@ -64,6 +54,15 @@ public class Asks implements Serializable{
 	public void setBodyAsk(String bodyAsk) {
 		this.bodyAsk = bodyAsk;
 	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
