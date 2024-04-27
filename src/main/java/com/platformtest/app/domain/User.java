@@ -23,6 +23,8 @@ public class User implements Serializable {
 	
 	@DBRef
 	private List<Asks> asks;
+	@DBRef
+	private List<Response> response;
 	
 	public User() {
 		// TODO Auto-generated constructor stub
@@ -35,6 +37,7 @@ public class User implements Serializable {
 		this.password = password;
 		this.name = name;
 		this.asks = new ArrayList<Asks>();
+		this.response = new ArrayList<Response>();
 	}
 
 	public String getId() {
@@ -79,6 +82,14 @@ public class User implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public List<Response> getResponse() {
+		return response;
+	}
+
+	public void setResponse(List<Response> response) {
+		this.response = response;
 	}
 
 	@Override

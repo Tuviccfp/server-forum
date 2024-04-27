@@ -1,6 +1,8 @@
 package com.platformtest.app.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import org.springframework.data.annotation.Id;
@@ -18,6 +20,8 @@ public class Asks implements Serializable{
 
 	@DBRef
 	private User user;
+	@DBRef
+	private List<Response> response;
 
 	public Asks() {
 		// TODO Auto-generated constructor stub
@@ -29,6 +33,7 @@ public class Asks implements Serializable{
 		this.title = title;
 		this.bodyAsk = bodyAsk;
 		this.user = user;
+		this.response = new ArrayList<Response>();
 	}
 
 	public String getId() {
@@ -61,6 +66,14 @@ public class Asks implements Serializable{
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public List<Response> getResponse() {
+		return response;
+	}
+
+	public void setResponse(List<Response> response) {
+		this.response = response;
 	}
 
 	@Override
