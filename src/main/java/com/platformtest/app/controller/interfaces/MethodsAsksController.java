@@ -16,4 +16,5 @@ public interface MethodsAsksController {
 	ResponseEntity<DTOAsks> findById(@PathVariable String id);
 	ResponseEntity<String> insertNewAsks(@RequestBody DTOAsks asks, @AuthenticationPrincipal Jwt jwt);
 	ResponseEntity<String> updateAsks(@RequestBody DTOAsks asks, @PathVariable String id);
+	ResponseEntity<String> deleteAsks(@PathVariable String id);
 }

@@ -70,6 +70,7 @@ public class AsksController implements MethodsAsksController {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não existe nenhum usuário vindo de headers com esse id.");
     }
 
+	@PutMapping(value = "/edit-asks/{id}")
 	@Override
 	public ResponseEntity<String> updateAsks(DTOAsks asks, String id) {
 		Optional<Asks> existIdAsk = asksService.findById(id);
@@ -81,5 +82,12 @@ public class AsksController implements MethodsAsksController {
 		editAsk.setBodyAsk(asks.bodyAsk());
 		asksRepository.save(editAsk);
 		return ResponseEntity.status(HttpStatus.OK).body("Pergunta editada com sucesso.");
+	}
+
+	@DeleteMapping(value = "/delete/{id}")
+	@Override
+	public ResponseEntity<String> deleteAsks(String id) {
+		asksService.delete(id);
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Deletado com sucesso.");
 	}
 }

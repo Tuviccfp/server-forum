@@ -42,7 +42,10 @@ public class AsksService {
 	public Optional<User> findUserById(String id) {
         return (Optional<User>) repoUser.findById(id);
 	}
-	
+
+	public void delete(String id) {
+		repoAsk.deleteById(id);
+	}
 	public Asks insertNewAsk(Asks ask) {
 		return repoAsk.insert(ask);
 	}
