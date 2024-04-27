@@ -46,18 +46,7 @@ public class UserController implements MethodsUserController {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
-	@PostMapping(value = "/testando")
-	public String rotaPost(@RequestBody String name) {
-		return name;
-	}
-	
-	@GetMapping(value = "/teste")
-	@PreAuthorize("hasAuthority('SCOPE_USER')")
-	public ResponseEntity<String> testeRota() {
-		return ResponseEntity.ok("Retorno de rota");
-	}
-	
+
 	@PostMapping("/register-new-account")
 	@Override
 	public ResponseEntity<String> insertNewUser(NewUser newuser) {
@@ -83,9 +72,7 @@ public class UserController implements MethodsUserController {
 				.expiresAt(now.plusSeconds(expiresIn))
 				.claim("scope", user.get().getRole())
 				.build();
-		
 		var jwtValue = config.jwtEncoder().encode(JwtEncoderParameters.from(claims)).getTokenValue();
-		
 		return ResponseEntity.ok(new LoginResponse(jwtValue, expiresIn));
 	}
 }
