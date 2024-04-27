@@ -5,10 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-
+@Getter
+@Setter
 @Document
 public class Asks implements Serializable{
 	private static final long serialVersionUID = 1L;
@@ -34,46 +37,6 @@ public class Asks implements Serializable{
 		this.bodyAsk = bodyAsk;
 		this.user = user;
 		this.response = new ArrayList<Response>();
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getBodyAsk() {
-		return bodyAsk;
-	}
-
-	public void setBodyAsk(String bodyAsk) {
-		this.bodyAsk = bodyAsk;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public List<Response> getResponse() {
-		return response;
-	}
-
-	public void setResponse(List<Response> response) {
-		this.response = response;
 	}
 
 	@Override
