@@ -4,17 +4,17 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
+import com.platformtest.app.exception.IdNotFound;
+import com.platformtest.app.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.platformtest.app.controller.interfaces.MethodsUserController;
 import com.platformtest.app.domain.User;
@@ -30,11 +30,16 @@ import com.platformtest.app.services.UserServices;
 @RequestMapping(value = "/api/register")
 public class UserController implements MethodsUserController {
 
-	@Autowired
-	private UserServices service;
-	@Autowired 
-	private SecurityConfig config;
-	
+	private final UserServices service;
+	private final SecurityConfig config;
+    private final UserRepository userRepository;
+
+	public UserController(UserServices service, SecurityConfig config, UserRepository userRepository) {
+		this.service = service;
+		this.config = config;
+		this.userRepository = userRepository;
+	}
+
 	@Override
 	public ResponseEntity<List<UserDTO>> findAll() {
 		// TODO Auto-generated method stub
@@ -64,7 +69,7 @@ public class UserController implements MethodsUserController {
 			throw new BadCredentialsException("Usuário ou senha não batem");
 		}
 		var now = Instant.now();
-		var expiresIn = 300L;
+		var expiresIn = 3600L;
 		var claims = JwtClaimsSet.builder()
 				.issuer("myback")
 				.subject(user.get().getId())
@@ -74,5 +79,19 @@ public class UserController implements MethodsUserController {
 				.build();
 		var jwtValue = config.jwtEncoder().encode(JwtEncoderParameters.from(claims)).getTokenValue();
 		return ResponseEntity.ok(new LoginResponse(jwtValue, expiresIn));
+	}
+
+	@PutMapping(value = "/edit-user")
+	@Override
+	public ResponseEntity<String> updateUser(NewUser newUser, Jwt jwt) {
+		Optional<User> userOptional = service.findById(jwt.getSubject());
+		if (userOptional.isEmpty()) {
+			throw new IdNotFound("Ops.. Houve algo de errado.");
+		}
+		User editUser = userOptional.get();
+		editUser.setEmail(newUser.email());
+		editUser.setPassword(PassEncoder.encodePassword(newUser.password()));
+		userRepository.save(editUser);
+		return ResponseEntity.status(HttpStatus.CREATED).body("Valores alterados com sucesso.");
 	}
 }
