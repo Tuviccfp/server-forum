@@ -25,7 +25,9 @@ public class User implements Serializable {
 	private List<Asks> asks;
 	@DBRef
 	private List<Response> response;
-	
+	@DBRef
+	private List<Category> categories;
+
 	public User() {
 		// TODO Auto-generated constructor stub
 	}
@@ -38,6 +40,7 @@ public class User implements Serializable {
 		this.name = name;
 		this.asks = new ArrayList<Asks>();
 		this.response = new ArrayList<Response>();
+		this.categories = new ArrayList<Category>();
 	}
 
 	public String getId() {
@@ -90,6 +93,14 @@ public class User implements Serializable {
 
 	public void setResponse(List<Response> response) {
 		this.response = response;
+	}
+
+	public List<Category> getCategories() {
+		return categories;
+	}
+
+	public void setCategories(List<Category> categories) {
+		this.categories = categories;
 	}
 
 	@Override
