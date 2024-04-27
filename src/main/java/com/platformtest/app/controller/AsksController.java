@@ -6,6 +6,7 @@ import java.util.Optional;
 import com.platformtest.app.domain.User;
 import com.platformtest.app.dto.DTOAsks;
 import com.platformtest.app.exception.IdNotFound;
+import com.platformtest.app.repository.AsksRepository;
 import com.platformtest.app.repository.UserRepository;
 import com.platformtest.app.services.AsksService;
 import com.platformtest.app.services.UserServices;
@@ -24,11 +25,13 @@ public class AsksController implements MethodsAsksController {
 	private final UserServices userServices;
 	private final AsksService asksService;
 	private final UserRepository userRepository;
+	private final AsksRepository asksRepository;
 
-	public AsksController(UserServices userServices, AsksService asksService, UserRepository userRepository) {
+	public AsksController(UserServices userServices, AsksService asksService, UserRepository userRepository, AsksRepository asksRepository) {
 		this.userServices = userServices;
 		this.asksService = asksService;
 		this.userRepository = userRepository;
+		this.asksRepository = asksRepository;
 	}
 
 	@GetMapping(value = "/search-all")
@@ -66,4 +69,17 @@ public class AsksController implements MethodsAsksController {
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não existe nenhum usuário vindo de headers com esse id.");
     }
+
+	@Override
+	public ResponseEntity<String> updateAsks(DTOAsks asks, String id) {
+		Optional<Asks> existIdAsk = asksService.findById(id);
+		if (existIdAsk.isEmpty()) {
+			throw new IdNotFound("Não existe nada com esse id");
+		}
+		Asks editAsk = existIdAsk.get();
+		editAsk.setTitle(asks.title());
+		editAsk.setBodyAsk(asks.bodyAsk());
+		asksRepository.save(editAsk);
+		return ResponseEntity.status(HttpStatus.OK).body("Pergunta editada com sucesso.");
+	}
 }

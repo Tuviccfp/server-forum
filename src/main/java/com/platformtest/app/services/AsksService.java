@@ -23,8 +23,6 @@ public class AsksService {
 		this.repoAsk = repoAsk;
 		this.repoUser = repoUser;
 	}
-
-
 	
 	public List<Asks> findAll() {
         return repoAsk.findAll();
