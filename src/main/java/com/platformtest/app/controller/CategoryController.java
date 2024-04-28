@@ -2,8 +2,10 @@ package com.platformtest.app.controller;
 
 import com.platformtest.app.controller.interfaces.MethodsCategoryController;
 import com.platformtest.app.domain.Category;
+import com.platformtest.app.domain.User;
 import com.platformtest.app.dto.responses.CategoryListAsks;
 import com.platformtest.app.exception.IdNotFound;
+import com.platformtest.app.repository.UserRepository;
 import com.platformtest.app.services.CategoryService;
 import com.platformtest.app.services.UserServices;
 import org.springframework.http.HttpStatus;
@@ -22,12 +24,15 @@ public class CategoryController implements MethodsCategoryController {
 
     private final CategoryService categoryService;
     private final UserServices userServices;
+    private final UserRepository userRepository;
 
-    public CategoryController(CategoryService categoryService, UserServices userServices) {
+    public CategoryController(CategoryService categoryService, UserServices userServices, UserRepository userRepository) {
         this.categoryService = categoryService;
         this.userServices = userServices;
+        this.userRepository = userRepository;
     }
 
+    @GetMapping(value = "/search-all")
     @Override
     public ResponseEntity<List<Category>> getAllCategories() {
         List<Category> categories = categoryService.findAll();
@@ -49,13 +54,15 @@ public class CategoryController implements MethodsCategoryController {
     @Override
     public ResponseEntity<String> insertNewCategory(Category category, Jwt jwt) {
         String id = jwt.getSubject();
-        var user = userServices.findById(id);
-        if (user.isEmpty()) {
-            throw new IdNotFound("Não existe nada com esse id");
-        }
-        Category newCategory = new Category(category.getCategoryName(), category.getId(), user.get());
-        newCategory = categoryService.insertNew(newCategory);
-        user.get().getCategories().add(newCategory);
+         var user = userServices.findById(id);
+         if (user.isEmpty()) {
+             throw new IdNotFound("Não existe nada com esse id");
+         }
+         User objUser = user.get();
+        Category newCategory = new Category(category.getCategoryName(), category.getId(), objUser);
+        categoryService.insertNew(newCategory);
+         objUser.getCategories().add(newCategory);
+        userRepository.save(objUser);
         return ResponseEntity.status(HttpStatus.CREATED).body("Categoria publicada com sucesso");
     }
 }

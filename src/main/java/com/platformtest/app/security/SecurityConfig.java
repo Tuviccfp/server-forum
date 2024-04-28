@@ -66,6 +66,7 @@ public class SecurityConfig {
                 	custom.requestMatchers(HttpMethod.POST, "/api/register/**").permitAll();
                 	custom.requestMatchers(HttpMethod.GET, "/api/register/*").permitAll();
                     custom.requestMatchers(HttpMethod.GET, "/asks/search-all").permitAll();
+                    custom.requestMatchers(HttpMethod.GET, "/category/search-all").permitAll();
                     custom.anyRequest().authenticated();
                 })
                 .oauth2ResourceServer(oauth2 -> {

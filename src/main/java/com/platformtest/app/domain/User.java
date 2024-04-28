@@ -46,8 +46,8 @@ public class User implements Serializable {
 		this.password = password;
 		this.name = name;
 		this.asks = new ArrayList<Asks>();
-		this.response = new ArrayList<Response>();
-		this.categories = new ArrayList<Category>();
+		this.response = new ArrayList<>();
+		this.categories = new ArrayList<>();
 	}
 
 	@Override

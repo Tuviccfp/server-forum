@@ -74,7 +74,7 @@ public class AsksController implements MethodsAsksController {
 		Optional<User> user = userRepository.findById(userId);
 		if (user.isPresent()) {
 			User getUser = user.get();
-			Asks ask = new Asks(asks.id(), userId, asks.title(), asks.bodyAsk(), getUser);
+			Asks ask = new Asks(asks.id(), asks.title(), asks.bodyAsk(), getUser);
 			ask = asksService.insertNewAsk(ask);
 			getUser.getAsks().add(ask);
 			userRepository.save(getUser);

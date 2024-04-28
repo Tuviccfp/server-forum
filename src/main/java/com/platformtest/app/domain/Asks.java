@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,16 +26,11 @@ public class Asks implements Serializable{
 	private String bodyAsk;
 
 	@DBRef
-	@JsonBackReference
 	private User user;
 	@DBRef
 	private List<Response> response;
 
-	public Asks() {
-		// TODO Auto-generated constructor stub
-	}
-
-	public Asks(String ided, String id, String title, String bodyAsk, User user) {
+	public Asks(String id, String title, String bodyAsk, User user) {
 		super();
 		this.id = id;
 		this.title = title;
