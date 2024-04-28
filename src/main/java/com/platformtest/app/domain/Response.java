@@ -1,5 +1,6 @@
 package com.platformtest.app.domain;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
@@ -16,6 +17,7 @@ public class Response implements Serializable {
 
     @Id
     private String id;
+    @NotNull
     private String response;
 
     @DBRef

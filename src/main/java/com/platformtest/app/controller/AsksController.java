@@ -1,10 +1,12 @@
 package com.platformtest.app.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import com.platformtest.app.domain.User;
 import com.platformtest.app.dto.DTOAsks;
+import com.platformtest.app.dto.responses.AskListUserName;
 import com.platformtest.app.exception.IdNotFound;
 import com.platformtest.app.repository.AsksRepository;
 import com.platformtest.app.repository.UserRepository;
@@ -36,9 +38,20 @@ public class AsksController implements MethodsAsksController {
 
 	@GetMapping(value = "/search-all")
 	@Override
-	public ResponseEntity<List<Asks>> findAll() {
-		List<Asks> asks = asksService.findAll();
-		return ResponseEntity.status(HttpStatus.OK).body(asks);
+	public ResponseEntity<List<AskListUserName>> findAll() {
+		List<Asks> listAllAsks = asksService.findAll();
+		List<AskListUserName> result = new ArrayList<>();
+		for (Asks ask : listAllAsks) {
+			String nameUser = ask.getUser().getEmail();
+			AskListUserName dto = new AskListUserName(
+					ask.getId(),
+					ask.getTitle(),
+					ask.getBodyAsk(),
+					nameUser
+			);
+			result.add(dto);
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(result);
 	}
 
 	@GetMapping(value = "/list-ask/{id}")

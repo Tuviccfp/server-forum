@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
@@ -18,10 +21,13 @@ public class Asks implements Serializable{
 
 	@Id
 	private String id;
+	@NotNull
     private String title;
-    private String bodyAsk;
+    @NotNull
+	private String bodyAsk;
 
 	@DBRef
+	@JsonBackReference
 	private User user;
 	@DBRef
 	private List<Response> response;

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
@@ -19,8 +20,11 @@ public class User implements Serializable {
 
 	@Id
 	private String id;
+	@NotNull
 	private String email;
+	@NotNull
 	private String name;
+	@NotNull
 	private String password;
 	private String role = "USER";
 	

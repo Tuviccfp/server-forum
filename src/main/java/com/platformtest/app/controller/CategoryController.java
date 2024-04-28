@@ -2,12 +2,14 @@ package com.platformtest.app.controller;
 
 import com.platformtest.app.controller.interfaces.MethodsCategoryController;
 import com.platformtest.app.domain.Category;
+import com.platformtest.app.dto.responses.CategoryListAsks;
 import com.platformtest.app.exception.IdNotFound;
 import com.platformtest.app.services.CategoryService;
 import com.platformtest.app.services.UserServices;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,12 +30,19 @@ public class CategoryController implements MethodsCategoryController {
 
     @Override
     public ResponseEntity<List<Category>> getAllCategories() {
-        return null;
+        List<Category> categories = categoryService.findAll();
+        return ResponseEntity.status(HttpStatus.OK).body(categories);
     }
 
+    @GetMapping(value = "/get-category/{id}")
     @Override
-    public ResponseEntity<Category> getCategoryById(String id) {
-        return null;
+    public ResponseEntity<CategoryListAsks> getCategoryById(String id) {
+        var category = categoryService.findById(id);
+        if (category == null) {
+            throw new IdNotFound("Não existe nada com esse id");
+        }
+        CategoryListAsks list = new CategoryListAsks(category.getId(), category.getCategoryName(), category.getAsks());
+        return ResponseEntity.status(HttpStatus.OK).body(list);
     }
 
     @PostMapping(value = "/new-category")

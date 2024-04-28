@@ -29,4 +29,7 @@ public class CategoryService {
     public Category insertNew(Category category) {
         return categoryRepository.insert(category);
     }
+    public List<Category> findByName(String name) {
+        return categoryRepository.findByCategoryName(name);
+    }
 }

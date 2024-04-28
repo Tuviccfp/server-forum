@@ -2,10 +2,13 @@ package com.platformtest.app.security;
 
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.time.Duration;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,6 +19,7 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -61,6 +65,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(custom -> {
                 	custom.requestMatchers(HttpMethod.POST, "/api/register/**").permitAll();
                 	custom.requestMatchers(HttpMethod.GET, "/api/register/*").permitAll();
+                    custom.requestMatchers(HttpMethod.GET, "/asks/search-all").permitAll();
                     custom.anyRequest().authenticated();
                 })
                 .oauth2ResourceServer(oauth2 -> {
@@ -102,7 +107,7 @@ public class SecurityConfig {
      * @return um decodificador de JWT
      */
     @Bean
-    public JwtDecoder jwtDecoder() {
+     public JwtDecoder jwtDecoder() {
         return NimbusJwtDecoder.withPublicKey(publicKey).build();
     }
 

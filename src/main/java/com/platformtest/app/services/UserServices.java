@@ -41,5 +41,4 @@ public class UserServices {
 			throw new FieldsEmpty("Não existe nenhum identificador informado por params");
 		}
 	}
-
 }
