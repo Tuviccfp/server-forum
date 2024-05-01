@@ -46,10 +46,15 @@ public class UserController implements MethodsUserController {
 		return null;
 	}
 
+	@GetMapping(value = "/profile-data")
 	@Override
-	public ResponseEntity<UserDTO> findById(String id) {
-		// TODO Auto-generated method stub
-		return null;
+	public ResponseEntity<User> findById(Jwt jwt) {
+		Optional<User> user = userRepository.findById(jwt.getSubject());
+		if (user.isEmpty()) {
+			throw new IdNotFound("Não foi possível localizar o id da autentificação");
+		}
+		User userDetails = user.get();
+		return new ResponseEntity<>(userDetails, HttpStatus.OK);
 	}
 
 	@PostMapping("/register-new-account")

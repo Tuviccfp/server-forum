@@ -2,6 +2,7 @@ package com.platformtest.app.controller.interfaces;
 
 import java.util.List;
 
+import com.platformtest.app.domain.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -15,7 +16,7 @@ import com.platformtest.app.dto.UserDTO;
 
 public interface MethodsUserController {
 	ResponseEntity<List<UserDTO>> findAll();
-	ResponseEntity<UserDTO> findById(@PathVariable String id);
+	ResponseEntity<User> findById(@AuthenticationPrincipal Jwt jwt);
 	ResponseEntity<String> insertNewUser(@RequestBody NewUser newUser);
 	ResponseEntity<LoginResponse> loginAccount(@RequestBody LoginRequest loginRequest);
 	ResponseEntity<String> updateUser(@RequestBody NewUser newUser, @AuthenticationPrincipal Jwt jwt);
