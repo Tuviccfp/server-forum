@@ -1,5 +1,6 @@
 package com.platformtest.app.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,6 +24,7 @@ public class Category {
     @DBRef
     private List<Asks> asks;
     @DBRef
+    @JsonIgnore
     private User user;
 
     public Category(String categoryName, String id, User user) {

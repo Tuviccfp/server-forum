@@ -3,6 +3,7 @@ package com.platformtest.app.controller;
 import com.platformtest.app.controller.interfaces.MethodsCategoryController;
 import com.platformtest.app.domain.Category;
 import com.platformtest.app.domain.User;
+import com.platformtest.app.dto.responses.CategoryBasicResponse;
 import com.platformtest.app.dto.responses.CategoryListAsks;
 import com.platformtest.app.exception.IdNotFound;
 import com.platformtest.app.repository.UserRepository;
@@ -36,6 +37,7 @@ public class CategoryController implements MethodsCategoryController {
     @Override
     public ResponseEntity<List<Category>> getAllCategories() {
         List<Category> categories = categoryService.findAll();
+
         return ResponseEntity.status(HttpStatus.OK).body(categories);
     }
 

@@ -2,6 +2,7 @@ package com.platformtest.app.controller.interfaces;
 
 import com.platformtest.app.domain.Category;
 import com.platformtest.app.dto.DTOCategory;
+import com.platformtest.app.dto.responses.CategoryBasicResponse;
 import com.platformtest.app.dto.responses.CategoryListAsks;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
