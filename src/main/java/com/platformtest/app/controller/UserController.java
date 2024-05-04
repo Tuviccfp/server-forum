@@ -4,12 +4,16 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
+import com.platformtest.app.domain.Asks;
+import com.platformtest.app.domain.Category;
+import com.platformtest.app.dto.responses.DataExtraProfile;
+import com.platformtest.app.dto.responses.UserProfile;
 import com.platformtest.app.exception.IdNotFound;
+import com.platformtest.app.repository.AsksRepository;
+import com.platformtest.app.repository.CategoryRepository;
 import com.platformtest.app.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
@@ -33,11 +37,15 @@ public class UserController implements MethodsUserController {
 	private final UserServices service;
 	private final SecurityConfig config;
     private final UserRepository userRepository;
+	private final CategoryRepository categoryRepository;
+	private final AsksRepository asksRepository;
 
-	public UserController(UserServices service, SecurityConfig config, UserRepository userRepository) {
+	public UserController(UserServices service, SecurityConfig config, UserRepository userRepository, CategoryRepository categoryRepository, AsksRepository asksRepository) {
 		this.service = service;
 		this.config = config;
 		this.userRepository = userRepository;
+		this.categoryRepository = categoryRepository;
+		this.asksRepository = asksRepository;
 	}
 
 	@Override
@@ -48,14 +56,26 @@ public class UserController implements MethodsUserController {
 
 	@GetMapping(value = "/profile-data")
 	@Override
-	public ResponseEntity<User> findById(Jwt jwt) {
+	public ResponseEntity<UserProfile> findById(Jwt jwt) {
 		Optional<User> user = userRepository.findById(jwt.getSubject());
 		if (user.isEmpty()) {
 			throw new IdNotFound("Não foi possível localizar o id da autentificação");
 		}
-		User userDetails = user.get();
+		UserProfile userDetails = new UserProfile(user.get().getId(), user.get().getEmail(), user.get().getName(), user.get().getRole());
 		return new ResponseEntity<>(userDetails, HttpStatus.OK);
 	}
+
+	@GetMapping(value = "/get-datas/{id}")
+	public ResponseEntity<DataExtraProfile> findById(@PathVariable("id") String id) {
+		Optional<User> user = userRepository.findById(id);
+		if (user.isEmpty()) {
+			throw new IdNotFound("Erro ao localizar algo com esse id");
+		}
+		List<Category> dataPublishByUser = categoryRepository.findCategoriesByUser(user.get());
+		List<Asks> dataAsksByUser = asksRepository.findAsksByUser(user.get());
+		DataExtraProfile getDataProfile = new DataExtraProfile(dataAsksByUser, dataPublishByUser);
+		return new ResponseEntity<>(getDataProfile, HttpStatus.OK);
+ 	}
 
 	@PostMapping("/register-new-account")
 	@Override
