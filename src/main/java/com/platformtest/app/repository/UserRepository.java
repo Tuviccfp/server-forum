@@ -13,4 +13,5 @@ import com.platformtest.app.domain.User;
 public interface UserRepository extends MongoRepository<User, String>{
 //	@Query("{email: '?0'}")
 	Optional<User> findByEmail(String email);
+	Optional<User> findByName(String name);
 }
